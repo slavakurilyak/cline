@@ -34,6 +34,8 @@ import {
 	openRouterDefaultModelInfo,
 	vertexDefaultModelId,
 	vertexModels,
+	groqModels,
+	groqDefaultModelId,
 } from "../../../../src/shared/api"
 import { ExtensionMessage } from "../../../../src/shared/ExtensionMessage"
 import { useExtensionState } from "../../context/ExtensionStateContext"
@@ -762,21 +764,6 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 						placeholder="Enter Groq API Key">
 						<span style={{ fontWeight: 500 }}>Groq API Key</span>
 					</VSCodeTextField>
-
-					<VSCodeTextField
-						value={apiConfiguration?.groqModelId || ""}
-						style={{ width: "100%", marginTop: 5 }}
-						onInput={handleInputChange("groqModelId")}
-						placeholder="deepseek-r1-distill-llama-70b">
-						<span style={{ fontWeight: 500 }}>Groq Model ID</span>
-					</VSCodeTextField>
-
-					<p style={{ fontSize: 12, marginTop: 3, color: "var(--vscode-descriptionForeground)" }}>
-						DeepSeek R1 Distilled Llama 70B served via GroqCloud. 
-						<VSCodeLink href="https://console.groq.com/docs" style={{ marginLeft: 6 }}>
-							Groq Docs
-						</VSCodeLink>
-					</p>
 				</div>
 			)}
 
@@ -809,6 +796,7 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 							{selectedProvider === "openai-native" && createDropdown(openAiNativeModels)}
 							{selectedProvider === "deepseek" && createDropdown(deepSeekModels)}
 							{selectedProvider === "mistral" && createDropdown(mistralModels)}
+							{selectedProvider === "groq" && createDropdown(groqModels)}
 						</DropdownContainer>
 
 						<ModelInfoView
@@ -1043,6 +1031,12 @@ export function normalizeApiConfiguration(apiConfiguration?: ApiConfiguration): 
 					...openAiModelInfoSaneDefaults,
 					supportsImages: false, // VSCode LM API currently doesn't support images
 				},
+			}
+		case "groq":
+			return {
+				selectedProvider: provider,
+				selectedModelId: apiConfiguration?.groqModelId || groqDefaultModelId,
+				selectedModelInfo: groqModels[groqDefaultModelId],
 			}
 		default:
 			return getProviderData(anthropicModels, anthropicDefaultModelId)

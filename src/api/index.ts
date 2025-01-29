@@ -16,7 +16,7 @@ import { VsCodeLmHandler } from "./providers/vscode-lm"
 import { GroqHandler } from "./providers/groq"
 
 export interface ApiHandler {
-	createMessage(systemPrompt: string, messages: Anthropic.Messages.MessageParam[]): ApiStream
+	createMessage(systemPrompt: string, messages: unknown[]): ApiStream
 	getModel(): { id: string; info: ModelInfo }
 }
 
